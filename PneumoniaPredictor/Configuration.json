@@ -1,0 +1,81 @@
+{
+	"paths": {
+		"data_path" : "/Users/babylon/Documents/Pneumonia/PythonDataProcessing/Data/",
+		"autoencoder_models_path": "Run/SavedModels/AutoEncoder/",
+		"xgboost_models_path": "Run/SavedModels/XGBoost/",
+		"autoencoder_output_path": "Run/Output/AutoEncoder/",
+		"xgboost_output_path": "Run/Output/XGBoost/",
+		"classification_report_path": "Run/ClassificationReport/",
+		"test_data_path": "Run/Output/TestSets/"
+
+	},
+	"data": {
+		"grouping": "PatientID",
+		"ordering": "Hour",
+		"sequence_length": 31,
+		"batch_size": 48,
+		"static_columns": [
+             "Age",
+             "Weightkg"
+		],
+
+		"dynamic_columns": [
+			"ALT" ,
+			"AST" ,
+			"Albumin" ,
+			"Bilirubin" ,
+			"CaO2" ,
+			"CentralvenousO2Saturation" ,
+			"Centralvenouspressure" ,
+			"Creatinine" ,
+			"Creactiveprotein" ,
+			"DiasBP1" ,
+			"Fibrinogen" ,
+			"Fio2" ,
+			"Haemoglobin" ,
+			"Heartrate" ,
+			"INR" ,
+			"Lactatedehydrogenase" ,
+			"Lymphocytes" ,
+			"MeanBP1" ,
+			"Neutrophils" ,
+			"PTT" ,
+			"PaCO2" ,
+			"PaO2" ,
+			"PeripheralO2Saturation" ,
+			"Platelets" ,
+			"SysBP1" ,
+			"PvCO2" ,
+			"Sao2" ,
+			"SpontaneousResRate" ,
+			"Temperature" ,
+			"Urea" ,
+			"WBC"
+		]
+						,
+		"classification_outcome": [
+			"Mortality3Days",
+			"Mortality5Days",
+			"Mortality7Days",
+			"Mortality14Days",
+			"Mortality30Days"
+		],
+		"classification_target": [
+			"Mortality"
+		],
+		"classification_label": {
+			"Mortality3Days":" 3D MOR",
+			"Mortality5Days":" 5D MOR",
+			"Mortality7Days":" 7D MOR",
+			"Mortality14Days":"14D MOR",
+			"Mortality30Days":"30D MOR"
+		}
+	},
+	"training": {
+		"folds": 10,
+		"epochs": 400
+	},
+	"model": {
+		"name": "pneumonia"
+	}
+}

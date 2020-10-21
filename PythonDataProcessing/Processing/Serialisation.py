@@ -48,7 +48,6 @@ def jsonRead(fileName):
         cohort = Cohort(cohort_dict['cohort'])
 
         for p in patients:
-            print(p)
             patient = Patient(p['PatientID'], p['los'], p['Gender'], p['Age'],
                               p["Mortality3Days"],
                               p["Mortality5Days"],
@@ -79,7 +78,6 @@ def makeTimeSeriesOneDay ( cohort ) :
     TimeSeriesDF = pd.DataFrame(columns=column_names)
     PatientDF = pd.DataFrame(columns=column_names)
     cohort.clean()
-    print(len(cohort.individual_ids))
     for ind in cohort.individuals :
         observation_list = getattr(ind, 'observations')
 
@@ -111,11 +109,11 @@ def makeTimeSeriesOneDay ( cohort ) :
         PatientDF['PatientID'] = ind.Patient_id
         PatientDF['Age'] = ind.Age
 
-        PatientDF["Mortality3Days"] = 1 if not pd.isnull(ind.M3) else 0
-        PatientDF["Mortality5Days"] = 1 if not pd.isnull(ind.M5) else 0
-        PatientDF["Mortality7Days"] = 1 if not pd.isnull(ind.M7) else 0
-        PatientDF["Mortality14Days"] = 1 if not pd.isnull(ind.M14) else 0
-        PatientDF["Mortality30Days"] = 1 if not pd.isnull(ind.M30) else 0
+        PatientDF["Mortality3Days"] = ind.M3 if not pd.isnull(ind.M3) else 0
+        PatientDF["Mortality5Days"] = ind.M5 if not pd.isnull(ind.M5) else 0
+        PatientDF["Mortality7Days"] = ind.M7 if not pd.isnull(ind.M7) else 0
+        PatientDF["Mortality14Days"] = ind.M14 if not pd.isnull(ind.M14) else 0
+        PatientDF["Mortality30Days"] = ind.M30 if not pd.isnull(ind.M30) else 0
 
         for index, row in observation_df.iterrows() :
             ob_name = row['ObservationName']
