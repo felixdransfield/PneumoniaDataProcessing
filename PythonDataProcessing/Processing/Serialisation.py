@@ -25,6 +25,7 @@ def jsonDump ( cohort, filename ) :
         individuals = []
         for ind in cohort.individuals :
             person_dic = ind.as_dict()
+            print(person_dic)
             i = 0
             observations = []
             for obs in ind.__getattribute__("observations") :
@@ -54,7 +55,13 @@ def jsonRead(fileName):
                               p["Mortality7Days"],
                               p["Mortality14Days"],
                               p["Mortality30Days"],
-                              deathperiod = p["DeathPeriod"])
+                              p["ITUAdmission3Days"],
+                              p["ITUAdmission5Days"],
+                              p["ITUAdmission7Days"],
+                              p["ITUAdmission14Days"],
+                              p["ITUAdmission30Days"],
+                              deathperiod = p["DeathPeriod"],
+                              ituperiod = p['ITUPeriod'])
 
             observations_dictionary = p['observations']
             observations = []
@@ -114,6 +121,13 @@ def makeTimeSeriesOneDay ( cohort ) :
         PatientDF["Mortality7Days"] = ind.M7 if not pd.isnull(ind.M7) else 0
         PatientDF["Mortality14Days"] = ind.M14 if not pd.isnull(ind.M14) else 0
         PatientDF["Mortality30Days"] = ind.M30 if not pd.isnull(ind.M30) else 0
+
+        PatientDF["ITUAdmission3Days"] = ind.ITU3 if not pd.isnull(ind.ITU3) else 0
+        PatientDF["ITUAdmission5Days"] = ind.ITU5 if not pd.isnull(ind.ITU5) else 0
+        PatientDF["ITUAdmission7Days"] = ind.ITU7 if not pd.isnull(ind.ITU7) else 0
+        PatientDF["ITUAdmission14Days"] = ind.ITU14 if not pd.isnull(ind.ITU14) else 0
+        PatientDF["ITUAdmission30Days"] = ind.ITU30 if not pd.isnull(ind.ITU30) else 0
+
 
         for index, row in observation_df.iterrows() :
             ob_name = row['ObservationName']

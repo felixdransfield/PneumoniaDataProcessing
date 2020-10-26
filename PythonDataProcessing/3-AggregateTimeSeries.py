@@ -1,4 +1,6 @@
 import pandas as pd
+pd.set_option('display.max_rows', None)
+
 import os
 from Processing.Dictionaries import aggregation, outcomes, id
 from Processing.CleanTimeSeries import remove_alpha, remove_nacolumns
@@ -27,7 +29,11 @@ def main():
     os.remove("Data/new_time_series.csv")
 
     int_columns = [ "Day", "Hour", "Age",
-                    "Mortality3Days", "Mortality7Days","Mortality14Days","Mortality30Days",
+                    "Mortality3Days", "Mortality5Days" ,"Mortality7Days",
+                    "Mortality14Days","Mortality30Days",
+                    "ITUAdmission3Days","ITUAdmission5Days",
+                    "ITUAdmission7Days", "ITUAdmission14Days",
+                    "ITUAdmission30Days",
                     "OrdinalHour"]
 
     new_time_series[int_columns] = new_time_series[int_columns].astype(int)
@@ -48,6 +54,11 @@ def main():
 
     #print("dim before remove na ", aggregate_series.shape)
     new_time_series.dropna(axis=1, how='all', inplace=True)
+
+    log = open("goat.txt", "w")
+    print("test", file=log)
+    print(new_time_series.isnull().sum() * 100 /len(new_time_series), file = log)
+
     #print("dim after remove na ", aggregate_series.shape)
     new_time_series.to_csv("Data/TimeSeriesAggregated.csv", index=False)
 

@@ -27,9 +27,15 @@ class Cohort :
                                  cohort_df.loc[cohort_df['hadm_id'] == some_id].loc[:, '7DM'].values[0],
                                  cohort_df.loc[cohort_df['hadm_id'] == some_id].loc[:, '14DM'].values[0],
                                  cohort_df.loc[cohort_df['hadm_id'] == some_id].loc[:, '30DM'].values[0],
+                                 cohort_df.loc[cohort_df['hadm_id'] == some_id].loc[:, '3DITU'].values[0],
+                                 cohort_df.loc[cohort_df['hadm_id'] == some_id].loc[:, '5DITU'].values[0],
+                                 cohort_df.loc[cohort_df['hadm_id'] == some_id].loc[:, '7DITU'].values[0],
+                                 cohort_df.loc[cohort_df['hadm_id'] == some_id].loc[:, '14DITU'].values[0],
+                                 cohort_df.loc[cohort_df['hadm_id'] == some_id].loc[:, '30DITU'].values[0],
                                  cohort_df.loc[cohort_df['hadm_id'] == some_id].loc[:, 'admittime'].values[0],
                                  cohort_df.loc[cohort_df['hadm_id'] == some_id].loc[:, 'deathtime'].values[0],
-                                 -1
+                                 cohort_df.loc[cohort_df['hadm_id'] == some_id].loc[:, 'readmission_time'].values[0],
+                                     -1,-1
 
                 )
                 self.individuals.append(individual)
@@ -46,7 +52,6 @@ class Cohort :
 
     def addBloodObservations (self, pid, bloods_for_patient, patientAdmissionDate ) :
         observations = []
-        print(" COLUMNS ARE: ", bloods_for_patient.columns)
         for index, row in bloods_for_patient.iterrows() :
             if not pd.isnull(row.vitalid) :
                 obs = Observation("Vital",

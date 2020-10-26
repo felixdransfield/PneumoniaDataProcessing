@@ -1,38 +1,58 @@
 import pandas as pd
 from Cohort.Cohort import Cohort
 from Processing.Utils import convert_to_datetime
-
-from Processing.Clean import clean_cohort, clean_vitals
+import time
+from Processing.Clean import clean_cohort, clean_vitals, add_itureadmission
 from Processing.Serialisation import jsonDump
-
+import numpy as np
+from datetime import datetime
+from time import mktime
 
 def main():
     #1. extract only first icu stay
-    #vitals_data = pd.read_csv("Data/TimeSeries.csv")
+    vitals_data = pd.read_csv("Data/TimeSeries.csv")
 
-    #hadm_ids = set(vitals_data['hadm_id'])
+    itu_readmission_df = pd.DataFrame()
+    hadm_ids = set(vitals_data['hadm_id'])
 
-    #vitals_data = vitals_data[~vitals_data['vitalid'].isin(['MeanBP2', 'SysBP2', 'DiasBP2'])]
-    #vitals_data_subset = pd.DataFrame(columns = vitals_data.columns)
-    #for idx in hadm_ids:
-     #   admission_df = vitals_data.loc[vitals_data['hadm_id'] == idx]
-     #   first_icustay = (admission_df['icustay_id']).iloc[0]
-     #   icustay_df = vitals_data.loc[vitals_data['icustay_id'] == first_icustay]
-     #   vitals_data_subset = vitals_data_subset.append(icustay_df, ignore_index=True)
+    vitals_data = vitals_data[~vitals_data['vitalid'].isin(['MeanBP2', 'SysBP2', 'DiasBP2'])]
 
-    #num_admissions_final = len(set(vitals_data_subset['hadm_id']))
-    #print("SHAPE OF THE FINAL DF: ", vitals_data_subset.shape, "number of admissions in it: ", num_admissions_final)
-    #vitals_data_subset.to_csv("Data/vitals_final.csv", index=False)
+    vitals_data_subset = pd.DataFrame(columns = vitals_data.columns)
+
+    for idx in hadm_ids:
+        admission_df = vitals_data.loc[vitals_data['hadm_id'] == idx]
+        unique_icustays = set(admission_df['icustay_id'])
+        if len(unique_icustays) > 1:
+            aggregated_admission = admission_df.groupby('icustay_id').first()
+            readmission_times =  aggregated_admission['time']
+            sorted_readmission_times = sorted((time.strptime(d, "%d/%m/%y %H:%S") for d in readmission_times), reverse=False)
+            itu_readmission_date = sorted_readmission_times[1]
+            itu_readmission_date = datetime.fromtimestamp(mktime(itu_readmission_date))
+            itu_readmission_df = itu_readmission_df.append({'hadm_id': int(idx) ,'readmission_time': itu_readmission_date}, ignore_index=True)
+        else:
+            itu_readmission_df = itu_readmission_df.append({'hadm_id': int(idx) ,'readmission_time': np.nan}, ignore_index=True)
+
+        first_icustay = (admission_df['icustay_id']).iloc[0]
+        icustay_df = vitals_data.loc[vitals_data['icustay_id'] == first_icustay]
+
+        vitals_data_subset = vitals_data_subset.append(icustay_df, ignore_index=True)
+
+    itu_readmission_df.columns =['hadm_id', 'readmission_time']
+    itu_readmission_df.to_csv("Data/itureadmission.csv", index=False)
+    vitals_data_subset.to_csv("Data/vitals_final.csv", index=False)
 
 
     vitals = pd.read_csv("Data/vitals_final.csv")
     cohort_data = pd.read_csv("Data/DemographicsOutcomes.csv")
-    #obtain only patients whose time-series we have
-    cohort_data = cohort_data[cohort_data['hadm_id'].isin(vitals['hadm_id'])]
-    #recode males = 0, females = 1
+    itu_readmission_df = pd.read_csv("Data/itureadmission.csv")
 
+    cohort_data = add_itureadmission(cohort_data, itu_readmission_df)
+
+    #obtain only patients whose time-series we have
+
+    cohort_data = cohort_data[cohort_data['hadm_id'].isin(vitals['hadm_id'])]
     cohort_data = clean_cohort(cohort_data)
-    #print(get_distribution_percentages(cohort_data['30DM']))
+
     cohort_data.to_csv("Data/DemographicsOutcomesCleaned.csv", index=False)
 
     vitals_data = clean_vitals(vitals)

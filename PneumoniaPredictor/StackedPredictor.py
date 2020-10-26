@@ -151,7 +151,6 @@ def main () :
             y_pred_binary, best_threshold, precision_rt, recall_rt, yhat = \
                 static_baseline_classifier.predict(static_aggregate_test_df, y_test)
 
-
             print(" CLASS WEIGHTS FOR Y ACTUAL: ", class_counts(y_test))
             print(" CLASS WEIGHTS FOR Y PREDICTE: ", class_counts(y_pred_binary))
 

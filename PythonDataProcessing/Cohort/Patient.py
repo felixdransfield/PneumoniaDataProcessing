@@ -3,7 +3,8 @@ from datetime import datetime, timedelta
 from dateutil import parser
 from Processing.Utils import convert_to_datetime
 class Patient:
-    def __init__(self, id, los,gender, age, m3, m5, m7, m14, m30,admitDate=None, deathDate=None,deathperiod=-1):
+    def __init__(self, id, los,gender, age, m3, m5, m7, m14, m30, itu3, itu5, itu7, itu14, itu30,
+                 admitDate=None, deathDate=None, ituDate = None, deathperiod=-1, ituperiod=-1):
 
         self.Patient_id = id
         self.Age = age
@@ -13,18 +14,35 @@ class Patient:
         if not (pd.isnull(deathDate)):
             DeathDate = convert_to_datetime(deathDate)
 
+        if not (pd.isnull(ituDate)):
+            ITUDate = convert_to_datetime(ituDate)
         if not (pd.isnull(deathDate)) and not (pd.isnull(admitDate)):
             self.deathRange = DeathDate- AdmitDate
         else:
             self.deathRange = -1
+
+        if not (pd.isnull(ituDate)) and not (pd.isnull(admitDate)):
+            self.ituRange = ITUDate- AdmitDate
+        else:
+            self.ituRange = -1
+
         self.AdmitDate = admitDate
         self.DeathDate = deathDate
+        self.ITUDate = ituDate
+
         self.los = los
         self.M3 = m3
         self.M5 = m5
         self.M7 = m7
         self.M14 = m14
         self.M30 = m30
+
+        self.ITU3 = itu3
+        self.ITU5 = itu5
+        self.ITU7 = itu7
+        self.ITU14 = itu14
+        self.ITU30 = itu30
+
         self.observations = []
 
     def addObservations( self, observations ):
@@ -46,10 +64,16 @@ class Patient:
                        'Gender' : self.Gender,
                        'los': self.los,
                        'DeathPeriod' : self.deathRange,
+                       'ITUPeriod': self.ituRange,
                        'Mortality3Days': self.M3,
                        'Mortality5Days' : self.M5,
                        'Mortality7Days' : self.M7,
                        'Mortality14Days' : self.M14,
-                       'Mortality30Days' : self.M30
+                       'Mortality30Days' : self.M30,
+                       'ITUAdmission3Days': self.ITU3,
+                       'ITUAdmission5Days': self.ITU5,
+                       'ITUAdmission7Days': self.ITU7,
+                       'ITUAdmission14Days': self.ITU14,
+                       'ITUAdmission30Days': self.ITU30
                        }
         return patient_row

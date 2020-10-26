@@ -16,13 +16,23 @@ def main():
     print(" Death perentages: ", get_distribution_percentages(death_columns_bool))
     print(" Death counts: ", get_distribution_counts(death_columns_bool))
 
-
+    print(cohort.columns)
     death_periods_int = [0 if x =='-1' else int(x.split('da')[0]) for x in death_columns]
     print(death_periods_int)
     death_periods_int = [x for x in death_periods_int if x > 0]
     print(death_periods_int)
 
     print(" Death periods stats", pd.Series(death_periods_int).describe())
+
+    itu_columns = cohort_subset['ituperiod'].copy()
+
+    print(cohort.columns)
+    itu_periods_int = [0 if x =='-1' else int(x.split('da')[0]) for x in itu_columns]
+    print(itu_periods_int)
+    itu_periods_int = [x for x in itu_periods_int if x > 0]
+    print(itu_periods_int)
+    print(" ITU periods stats", pd.Series(itu_periods_int).describe())
+
 
 
 if __name__ == "__main__" :

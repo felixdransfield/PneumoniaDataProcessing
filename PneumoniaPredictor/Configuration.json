@@ -58,17 +58,27 @@
 			"Mortality5Days",
 			"Mortality7Days",
 			"Mortality14Days",
-			"Mortality30Days"
+			"Mortality30Days",
+			"ITUAdmission5Days",
+			"ITUAdmission7Days",
+			"ITUAdmission14Days",
+			"ITUAdmission30Days"
 		],
 		"classification_target": [
-			"Mortality"
+			"Mortality",
+			"ITUAdmission"
+
 		],
 		"classification_label": {
 			"Mortality3Days":" 3D MOR",
 			"Mortality5Days":" 5D MOR",
 			"Mortality7Days":" 7D MOR",
 			"Mortality14Days":"14D MOR",
-			"Mortality30Days":"30D MOR"
+			"Mortality30Days":"30D MOR",
+			"ITUAdmission5Days":"5D ITU",
+			"ITUAdmission7Days":"7D ITU",
+			"ITUAdmission14Days":"14D ITU",
+			"ITUAdmission30Days":"30D ITU"
 		}
 	},
 	"training": {

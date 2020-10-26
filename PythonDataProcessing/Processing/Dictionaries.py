@@ -122,8 +122,8 @@ aggregation = { #ZI Check Aggregation function is appropriate
     'WBC' : 'max'
 }
 
-outcomes = ['Mortality3Days','Mortality7Days','Mortality30Days',
-            'ITUAdmission3Days', 'ITUAdmission7Days','ITUAdmission30Days']
+outcomes = ['Mortality5Days','Mortality7Days', 'Mortality14Days', 'Mortality30Days',
+             'ITUAdmission5Days','ITUAdmission7Days', 'ITUAdmission14Days', 'ITUAdmission30Days']
 
 id = 'PatientID'
 
